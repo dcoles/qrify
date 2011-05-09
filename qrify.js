@@ -17,6 +17,12 @@ else if (document.selection)
     txt = document.selection.createRange().text;
 }
 
+// If txt is still empty, use the current document's URL instead
+if (txt == '')
+{
+    txt = document.location.href;
+}
+
 // Open the selection in a new window
 window.open("https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl="
             + encodeURIComponent(txt));
