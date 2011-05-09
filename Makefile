@@ -1,5 +1,5 @@
 # Convert QRify into a minified JavaScript bookmarklet
-# Requires jsmin
+# Requires yui-compressor
 
 qrify-min.js: qrify.js
-	jsmin < qrify.js | ./bookmarklet.py > qrify-min.js
+	yui-compressor qrify.js | ./bookmarklet.py > qrify-min.js
