@@ -20,3 +20,7 @@ else if (document.selection)
 // Open the selection in a new window
 window.open("https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl="
             + encodeURIComponent(txt));
+
+// Ensure that clicking the bookmarklet does not redirect the current page
+// (Tested in Firefox, not a problem in Chrome)
+undefined;
