@@ -19,4 +19,4 @@ else if (document.selection)
 
 // Open the selection in a new window
 window.open("https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl="
-            + encodeURI(txt));
+            + encodeURIComponent(txt));
