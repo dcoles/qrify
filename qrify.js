@@ -33,6 +33,7 @@
 // Use a function to avoid polluting the browser's global namespace
 function qrify()
 {
+    var qr_size = 350;
     var txt='';
 
     // Get the text of the current selection
@@ -55,9 +56,41 @@ function qrify()
         txt = document.location.href;
     }
 
-    // Open the selection in a new window
-    window.open("https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl="
-                + encodeURIComponent(txt));
+    // Add a popup div to display the QR code
+    var body = document.body;
+    var popup = document.createElement("div");
+    var qr_image_url = "https://chart.googleapis.com/chart?chs=" + qr_size +
+            "x" + qr_size + "&cht=qr&chl=" + encodeURIComponent(txt);
+
+    // Handler to close on click
+    popup.addEventListener("click", function()
+    {
+        body.removeChild(popup);
+    }, false);
+
+    // CSS of popup
+    popup.style.display = "block";
+    popup.style.position = "absolute";
+    popup.style.width = qr_size + "px";
+    popup.style.height = "auto";
+    popup.style.top = 0;
+    popup.style.right = 0;
+    popup.style.zIndex = 99;
+    popup.style.backgroundColor = "#fff";
+    popup.style.border = "solid 1px black";
+
+    // Add title
+    var title = document.createElement("div");
+    title.innerHTML = "QRify: Click anywhere to close";
+    popup.appendChild(title);
+
+    // Add QR code image
+    var qr_image = document.createElement("img");
+    qr_image.src = qr_image_url;
+    popup.appendChild(qr_image);
+
+    // Finally add the image to the DOM
+    body.appendChild(popup);
 
     // Ensure that clicking the bookmarklet does not redirect the current page
     // (Tested in Firefox, not a problem in Chrome)
