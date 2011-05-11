@@ -99,7 +99,7 @@ var qrify =
         popup.style.height = "auto";
         popup.style.top = 0;
         popup.style.right = 0;
-        popup.style.zIndex = 99;
+        popup.style.zIndex = 9999;
         popup.style.backgroundColor = "#fff";
         popup.style.border = "solid 1px black";
 
