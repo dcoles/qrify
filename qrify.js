@@ -33,6 +33,9 @@
 // Use a function to avoid polluting the browser's global namespace
 function qrify()
 {
+    // QR codes can have up to 4296 characters but Google's chart API is 
+    // limited to URLs of 2048 bytes with GET requests.
+    var url_limit = 2048;
     var qr_size = 350;
     var txt='';
 
@@ -43,10 +46,12 @@ function qrify()
     }
     else if (document.getSelection)
     {
+        // Firefox
         txt = document.getSelection();
     }
     else if (document.selection)
     {
+        // IE
         txt = document.selection.createRange().text;
     }
 
@@ -56,11 +61,17 @@ function qrify()
         txt = document.location.href;
     }
 
+    // Create URL and check we haven't blown the URL size limit
+    var qr_image_url = "https://chart.googleapis.com/chart?chs=" + qr_size +
+            "x" + qr_size + "&cht=qr&chl=" + encodeURIComponent(txt);
+    if(qr_image_url.length > url_limit) {
+        window.alert("The current text is too large to be made into a QR code");
+        return undefined;
+    }
+
     // Add a popup div to display the QR code
     var body = document.body;
     var popup = document.createElement("div");
-    var qr_image_url = "https://chart.googleapis.com/chart?chs=" + qr_size +
-            "x" + qr_size + "&cht=qr&chl=" + encodeURIComponent(txt);
 
     // Handler to close on click
     popup.addEventListener("click", function()
