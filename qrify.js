@@ -30,97 +30,114 @@
  * Author: David Coles
  */
 
-// Use a function to avoid polluting the browser's global namespace
-function qrify()
+// Use a object to avoid polluting the browser's global namespace
+var qrify =
 {
     // QR codes can have up to 4296 characters but Google's chart API is 
     // limited to URLs of 2048 bytes with GET requests.
-    var url_limit = 2048;
-    var qr_size = 350;
-    var txt='';
+    urllimit: 2048,
+    size: 350,
 
-    // Get the text of the current selection
-    if (window.getSelection)
+    // Generate the Google chart URL for a QRCode
+    make_qr: function(text)
     {
-        txt = window.getSelection();
-    }
-    else if (document.getSelection)
-    {
-        // Firefox
-        txt = document.getSelection();
-    }
-    else if (document.selection)
-    {
-        // IE
-        txt = document.selection.createRange().text;
-    }
+        var url = "https://chart.googleapis.com/chart?chs=" + this.size +
+                "x" + this.size + "&cht=qr&chl=" + encodeURIComponent(text);
+        if(url.length > this.urllimit) {
+            return false;
+        } else {
+            return url;
+        }
+    },
 
-    // If txt is still empty, use the current document's URL instead
-    if (txt == '')
+    // Show the QR popup with the selected text or the current URL if no text 
+    // is selected
+    show: function()
     {
-        txt = document.location.href;
-    }
+        var txt='';
 
-    // Create URL and check we haven't blown the URL size limit
-    var qr_image_url = "https://chart.googleapis.com/chart?chs=" + qr_size +
-            "x" + qr_size + "&cht=qr&chl=" + encodeURIComponent(txt);
-    if(qr_image_url.length > url_limit) {
-        window.alert("The current text is too large to be made into a QR code");
+        // Get the text of the current selection
+        if (window.getSelection)
+        {
+            txt = window.getSelection();
+        }
+        else if (document.getSelection)
+        {
+            // Firefox
+            txt = document.getSelection();
+        }
+        else if (document.selection)
+        {
+            // IE
+            txt = document.selection.createRange().text;
+        }
+
+        // If txt is still empty, use the current document's URL instead
+        if (txt == '')
+        {
+            txt = document.location.href;
+        }
+
+        // Create URL and check we haven't blown the URL size limit
+        var qr_image_url = this.make_qr(txt);
+        if(!qr_image_url) {
+            window.alert("The current text is too large to be made into a QR code");
+            return undefined;
+        }
+
+        // Add a popup div to display the QR code
+        var body = document.body;
+        var popup = document.createElement("div");
+
+        // CSS of popup
+        popup.style.display = "block";
+        popup.style.position = "fixed";
+        popup.style.width = this.size + "px";
+        popup.style.height = "auto";
+        popup.style.top = 0;
+        popup.style.right = 0;
+        popup.style.zIndex = 99;
+        popup.style.backgroundColor = "#fff";
+        popup.style.border = "solid 1px black";
+
+        // Add title
+        var title = document.createElement("div");
+        title.innerHTML = "QRify: Click the image to close";
+        popup.appendChild(title);
+
+        // Add QR code image
+        var qr_image = document.createElement("img");
+        qr_image.src = qr_image_url;
+        qr_image.width = this.size;
+        qr_image.height = this.size;
+        popup.appendChild(qr_image);
+
+        // Add text preview
+        var text_preview = document.createElement("textarea");
+        text_preview.value = txt;
+        text_preview.style.width = "100%";
+        text_preview.style.padding = 0;
+        text_preview.style.border = "none";
+        text_preview.style.borderTop = "solid 1px #ccc";
+        text_preview.style.backgroundColor = "#eee";
+        text_preview.style.color = "#666";
+        text_preview.style.resize = "none";
+        text_preview.setAttribute("readonly", "readonly");
+        popup.appendChild(text_preview);
+
+        // Handler to close on click
+        qr_image.addEventListener("click", function()
+        {
+            body.removeChild(popup);
+        }, false);
+
+        // Finally add the image to the DOM
+        body.appendChild(popup);
+
+        // Ensure that clicking the bookmarklet does not redirect the current page
+        // (Tested in Firefox, not a problem in Chrome)
         return undefined;
     }
-
-    // Add a popup div to display the QR code
-    var body = document.body;
-    var popup = document.createElement("div");
-
-    // CSS of popup
-    popup.style.display = "block";
-    popup.style.position = "fixed";
-    popup.style.width = qr_size + "px";
-    popup.style.height = "auto";
-    popup.style.top = 0;
-    popup.style.right = 0;
-    popup.style.zIndex = 99;
-    popup.style.backgroundColor = "#fff";
-    popup.style.border = "solid 1px black";
-
-    // Add title
-    var title = document.createElement("div");
-    title.innerHTML = "QRify: Click the image to close";
-    popup.appendChild(title);
-
-    // Add QR code image
-    var qr_image = document.createElement("img");
-    qr_image.src = qr_image_url;
-    qr_image.width = qr_size;
-    qr_image.height = qr_size;
-    popup.appendChild(qr_image);
-
-    // Add text preview
-    var text_preview = document.createElement("textarea");
-    text_preview.value = txt;
-    text_preview.style.width = "100%";
-    text_preview.style.padding = 0;
-    text_preview.style.border = "none";
-    text_preview.style.borderTop = "solid 1px #ccc";
-    text_preview.style.backgroundColor = "#eee";
-    text_preview.style.color = "#666";
-    text_preview.style.resize = "none";
-    text_preview.setAttribute("readonly", "readonly");
-    popup.appendChild(text_preview);
-
-    // Handler to close on click
-    qr_image.addEventListener("click", function()
-    {
-        body.removeChild(popup);
-    }, false);
-
-    // Finally add the image to the DOM
-    body.appendChild(popup);
-
-    // Ensure that clicking the bookmarklet does not redirect the current page
-    // (Tested in Firefox, not a problem in Chrome)
-    return undefined;
 }
-// Actually call the function
-qrify();
+// Show the popup on load
+qrify.show();
