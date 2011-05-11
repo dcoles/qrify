@@ -75,7 +75,7 @@ function qrify()
 
     // CSS of popup
     popup.style.display = "block";
-    popup.style.position = "absolute";
+    popup.style.position = "fixed";
     popup.style.width = qr_size + "px";
     popup.style.height = "auto";
     popup.style.top = 0;
