@@ -105,7 +105,9 @@ var qrify =
 
         // Add title
         var title = document.createElement("div");
-        title.innerHTML = "QRify: Click the image to close";
+        title.innerHTML = "<a href=\"https://launchpad.net/qrify\">" + 
+              "QRify" +
+            "</a>: Click the image to close";
         popup.appendChild(title);
 
         // Add QR code image
