@@ -73,12 +73,6 @@ function qrify()
     var body = document.body;
     var popup = document.createElement("div");
 
-    // Handler to close on click
-    popup.addEventListener("click", function()
-    {
-        body.removeChild(popup);
-    }, false);
-
     // CSS of popup
     popup.style.display = "block";
     popup.style.position = "absolute";
@@ -92,13 +86,34 @@ function qrify()
 
     // Add title
     var title = document.createElement("div");
-    title.innerHTML = "QRify: Click anywhere to close";
+    title.innerHTML = "QRify: Click the image to close";
     popup.appendChild(title);
 
     // Add QR code image
     var qr_image = document.createElement("img");
     qr_image.src = qr_image_url;
+    qr_image.width = qr_size;
+    qr_image.height = qr_size;
     popup.appendChild(qr_image);
+
+    // Add text preview
+    var text_preview = document.createElement("textarea");
+    text_preview.value = txt;
+    text_preview.style.width = "100%";
+    text_preview.style.padding = 0;
+    text_preview.style.border = "none";
+    text_preview.style.borderTop = "solid 1px #ccc";
+    text_preview.style.backgroundColor = "#eee";
+    text_preview.style.color = "#666";
+    text_preview.style.resize = "none";
+    text_preview.setAttribute("readonly", "readonly");
+    popup.appendChild(text_preview);
+
+    // Handler to close on click
+    qr_image.addEventListener("click", function()
+    {
+        body.removeChild(popup);
+    }, false);
 
     // Finally add the image to the DOM
     body.appendChild(popup);
