@@ -50,29 +50,32 @@ var qrify =
         }
     },
 
-    // Show the QR popup with the selected text or the current URL if no text 
-    // is selected
-    show: function()
-    {
-        var txt='';
-
-        // Get the text of the current selection
+    // Gets the currenty selected text
+    selection: function() {
         if (window.getSelection)
         {
-            txt = window.getSelection();
+            return window.getSelection();
         }
         else if (document.getSelection)
         {
             // Firefox
-            txt = document.getSelection();
+            return document.getSelection();
         }
         else if (document.selection)
         {
             // IE
-            txt = document.selection.createRange().text;
+            return document.selection.createRange().text;
         }
+    },
 
-        // If txt is still empty, use the current document's URL instead
+    // Show the QR popup with the selected text or the current URL if no text 
+    // is selected
+    show: function()
+    {
+        // Get the text of the current selection
+        var txt = this.selection();
+
+        // If txt is empty, use the current document's URL instead
         if (txt == '')
         {
             txt = document.location.href;
