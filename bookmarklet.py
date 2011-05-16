@@ -29,15 +29,20 @@
 # Author: Matt Giuca
 
 import sys
+import urllib.parse
 
 def to_bookmarklet(infile):
     """Convert a JS file to a bookmarklet."""
     joined = ''.join(l.strip() for l in infile.readlines())
-    replaced = joined.replace(' ', '%20')
+    replaced = urllib.parse.quote(joined, safe="~")
     return "javascript:" + replaced
 
 def main():
-    print(to_bookmarklet(sys.stdin))
+    if len(sys.argv) > 1:
+        with open(sys.argv[1]) as f:
+            print(to_bookmarklet(f))
+    else:
+        print(to_bookmarklet(sys.stdin))
 
 if __name__ == "__main__":
     sys.exit(main())
