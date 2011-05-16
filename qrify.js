@@ -93,15 +93,16 @@ var qrify =
         var popup = document.createElement("div");
 
         // CSS of popup
-        popup.style.display = "block";
-        popup.style.position = "fixed";
-        popup.style.width = this.size + "px";
-        popup.style.height = "auto";
-        popup.style.top = 0;
-        popup.style.right = 0;
-        popup.style.zIndex = 9999;
-        popup.style.backgroundColor = "#fff";
-        popup.style.border = "solid 1px black";
+        var s = popup.style;
+        s.display = "block";
+        s.position = "fixed";
+        s.width = this.size + "px";
+        s.height = "auto";
+        s.top = 0;
+        s.right = 0;
+        s.zIndex = 9999;
+        s.backgroundColor = "#fff";
+        s.border = "solid 1px black";
 
         // Add title
         var title = document.createElement("div");
@@ -120,13 +121,14 @@ var qrify =
         // Add text preview
         var text_preview = document.createElement("textarea");
         text_preview.value = txt;
-        text_preview.style.width = "100%";
-        text_preview.style.padding = 0;
-        text_preview.style.border = "none";
-        text_preview.style.borderTop = "solid 1px #ccc";
-        text_preview.style.backgroundColor = "#eee";
-        text_preview.style.color = "#666";
-        text_preview.style.resize = "none";
+        var s = text_preview.style; 
+        s.width = "100%";
+        s.padding = 0;
+        s.border = "none";
+        s.borderTop = "solid 1px #ccc";
+        s.backgroundColor = "#eee";
+        s.color = "#666";
+        s.resize = "none";
         text_preview.setAttribute("readonly", "readonly");
         popup.appendChild(text_preview);
 
