@@ -31,11 +31,16 @@
 import sys
 import urllib.parse
 
+# All RFC 2396 "reserved" and "unreserved" characters are allowed to be
+# unescaped, except for "&" and "'", which should not appear in XML attribute
+# values.
+SAFE_CHARS = ";/?:@=+$,!~*()"
+
 def to_bookmarklet(infile):
     """Convert a JS file to a bookmarklet."""
     joined = ''.join(l.strip() for l in infile.readlines())
-    replaced = urllib.parse.quote(joined, safe="~")
-    return "javascript:" + replaced
+    quoted = urllib.parse.quote(joined, safe=SAFE_CHARS)
+    return "javascript:" + quoted
 
 def main():
     if len(sys.argv) > 1:
