@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+}
+div {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+textarea {
+  width: 100%;
+  border: none;
+  border-top: solid 1px #ccc;
+  background-color: #eee;
+  color: #666;
+  resize: none;
+}
