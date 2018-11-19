@@ -1,7 +1,7 @@
 {
   "name": "QRify",
   "description": "Transfer the currently selected text or current URL to a mobile device using a QR code.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "permissions": [
     "activeTab"
   ],
@@ -9,5 +9,10 @@
     "default_popup": "popup.html"
   },
   "content_security_policy": "default-src 'self'; img-src 'self' https://chart.googleapis.com;",
+  "icons": {
+	"16": "icon16.png",
+	"48": "icon48.png",
+	"128": "icon128.png"
+  },
   "manifest_version": 2
 }
